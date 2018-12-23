@@ -7,7 +7,17 @@ asyncAnswers = {
    * @returns {then: function} A promise like object containing a then property.
    */
   async: function async(value) {
-
+    promise = new Promise(
+      (resolve, reject) => {
+        if(value) {
+          resolve(value);
+        }
+        else {
+          reject (value);
+        }
+      }
+    );
+    return promise;
   },
 
   /**
@@ -21,6 +31,26 @@ asyncAnswers = {
    * @returns {then: function} A promise like object containing a then property.
    */
   manipulateRemoteData: function manipulateRemoteData(url) {
-
-  },
+    promise = new Promise(
+      (resolve, reject) => {
+        $.ajax({
+          url: url,
+          success: function (data) {
+            //all this is missing in the statement
+            var result = [];
+            for(i in data.people){ 
+              result.push( data.people[i].name);
+            }
+            result.sort();
+            resolve(result);
+          },
+          error: function(request, status, error) {
+            alert("Error: "+error+"\n"+"Status: "+status);
+            reject(url);
+          }
+        });
+      }
+    );
+    return promise;
+  }
 };
